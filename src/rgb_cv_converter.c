@@ -60,7 +60,7 @@ static void rgb_to_int(int i, int j, A2Methods_UArray2 array2, void *elem,
  *      rgb to cv               "to_cv"
  *      cv to rgb               "to_rgb"
  *      
- ************************/
+ ********************************/
 Pnm_ppm rgb_cv_convert(Pnm_ppm image, char *command) 
 {
         A2Methods_UArray2 new_pixels;
@@ -113,7 +113,7 @@ Pnm_ppm rgb_cv_convert(Pnm_ppm image, char *command)
  * Notes: Asserts that image is not NULL
  *        Asserts that elem in not NULL 
  *      
- ************************/
+ ****************************/
 static void rgb_to_cv(int i, int j, A2Methods_UArray2 array2, 
                         void *elem, void *cl)
 {
@@ -151,7 +151,7 @@ static void rgb_to_cv(int i, int j, A2Methods_UArray2 array2,
  * Notes: Asserts that image is not NULL
  *        Asserts that elem in not NULL 
  *      
- ************************/
+ *****************************/
 static void cv_to_rgb(int i, int j, A2Methods_UArray2 array2, 
                         void *elem, void *cl)
 {
@@ -187,7 +187,7 @@ static void cv_to_rgb(int i, int j, A2Methods_UArray2 array2,
  *      cosine coefficent floats to ints      "cos_to_int"
  *      cosine coefficent ints to floats      "cos_to_float"
  *      
- ************************/
+ ****************************************/
 static Pnm_ppm rgb_int_float_convert(Pnm_ppm image, char *command)
 {
         A2Methods_UArray2 new_pixels;
@@ -235,7 +235,7 @@ static Pnm_ppm rgb_int_float_convert(Pnm_ppm image, char *command)
  *        Asserts that image is not NULL
  *        Asserts that elem in not NULL 
  *      
- ************************/
+ *******************************/
 static void rgb_to_float(int i, int j, A2Methods_UArray2 array2, 
                         void *elem, void *cl)
 {
@@ -276,7 +276,7 @@ static void rgb_to_float(int i, int j, A2Methods_UArray2 array2,
  *        Asserts that image is not NULL
  *        Asserts that elem in not NULL 
  *      
- ************************/
+ *****************************/
 static void rgb_to_int(int i, int j, A2Methods_UArray2 array2, 
                         void *elem, void *cl)
 {        

@@ -16,13 +16,12 @@
 #define ONE_UINT64 1
 #define MAXBYTES 64
 
-Except_T Bitpack_Overflow = { "Overflow packing bits" };
+Except_T Bitpack_Overflow = {"Overflow packing bits"};
 
 /************************** Helper Functions ************************/
 uint64_t shift_left(uint64_t n, unsigned offset);
 uint64_t shift_right(uint64_t n, unsigned offset);
 /********************************************************************/
-
 
 /********** Bitpack_fitsu ********
  *
@@ -35,13 +34,14 @@ uint64_t shift_right(uint64_t n, unsigned offset);
  * Return: bool indicating if int can be represented in k bits
  *
  * Expects: none
- *      
+ *
  * Notes: Raise Bitpack_Overflow when width exceed MAXBYTES
- *      
+ *
  ************************/
 extern bool Bitpack_fitsu(uint64_t n, unsigned width)
 {
-        if (width > MAXBYTES) {
+        if (width > MAXBYTES)
+        {
                 RAISE(Bitpack_Overflow);
         }
 
@@ -59,13 +59,14 @@ extern bool Bitpack_fitsu(uint64_t n, unsigned width)
  * Return: bool indicating if int can be represented in k bits
  *
  * Expects: none
- *      
+ *
  * Notes: Raise Bitpack_Overflow when width exceed MAXBYTES
- *      
+ *
  ************************/
 extern bool Bitpack_fitss(int64_t n, unsigned width)
 {
-        if (width > MAXBYTES) {
+        if (width > MAXBYTES)
+        {
                 RAISE(Bitpack_Overflow);
         }
         /* Find upper and lower bounds and checks if n within this range*/
@@ -86,13 +87,14 @@ extern bool Bitpack_fitss(int64_t n, unsigned width)
  * Return: unsigned int from a field in the word
  *
  * Expects: none
- *      
+ *
  * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES
- *      
+ *
  ************************/
 extern uint64_t Bitpack_getu(uint64_t word, unsigned width, unsigned lsb)
 {
-        if (width + lsb > MAXBYTES) {
+        if (width + lsb > MAXBYTES)
+        {
                 RAISE(Bitpack_Overflow);
         }
 
@@ -112,16 +114,17 @@ extern uint64_t Bitpack_getu(uint64_t word, unsigned width, unsigned lsb)
  * Return: signed int from a field in the word
  *
  * Expects: none
- *      
+ *
  * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES
- *      
+ *
  ************************/
 extern int64_t Bitpack_gets(uint64_t word, unsigned width, unsigned lsb)
 {
-        if (width + lsb > 64) {
+        if (width + lsb > 64)
+        {
                 RAISE(Bitpack_Overflow);
         }
-        
+
         int64_t result = Bitpack_getu(word, width, lsb);
 
         /* checks if most significant bit is a 1*/
@@ -146,22 +149,23 @@ extern int64_t Bitpack_gets(uint64_t word, unsigned width, unsigned lsb)
  * Return: word containing the updated field
  *
  * Expects: none
- *      
- * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES or if 
+ *
+ * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES or if
  *        Bitpack_fitsu does not return true
- *      
+ *
  ************************/
 extern uint64_t Bitpack_newu(uint64_t word, unsigned width, unsigned lsb,
                              uint64_t value)
 {
-        if (width + lsb > MAXBYTES || Bitpack_fitsu(value, width) == 0){
+        if (width + lsb > MAXBYTES || Bitpack_fitsu(value, width) == 0)
+        {
                 RAISE(Bitpack_Overflow);
         }
 
         /* create a mask of 0s */
-        uint64_t mask = shift_right(~0ULL, (MAXBYTES - width)); 
+        uint64_t mask = shift_right(~0ULL, (MAXBYTES - width));
         mask = ~shift_left(mask, lsb); /* shift mask by lsb and invert */
-        word = word & mask; /* take intersection of word and mask */
+        word = word & mask;            /* take intersection of word and mask */
         /* it empties a space to intersect new value */
 
         value = shift_left(value, lsb);
@@ -182,35 +186,37 @@ extern uint64_t Bitpack_newu(uint64_t word, unsigned width, unsigned lsb,
  * Return: word containing the updated field
  *
  * Expects: none
- *      
- * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES or if 
+ *
+ * Notes: Raise Bitpack_Overflow when width + lsb exceed MAXBYTES or if
  *        Bitpack_fitss does not return true
- *      
+ *
  ************************/
 extern uint64_t Bitpack_news(uint64_t word, unsigned width, unsigned lsb,
                              int64_t value)
 {
-        if (width + lsb > MAXBYTES || Bitpack_fitss(value, width) == 0){
+        if (width + lsb > MAXBYTES || Bitpack_fitss(value, width) == 0)
+        {
                 RAISE(Bitpack_Overflow);
         }
 
-        if (value > 0) { /* if value is positive, run Bitpack_newu */
+        if (value > 0)
+        { /* if value is positive, run Bitpack_newu */
                 return Bitpack_newu(word, width, lsb, value);
         }
 
         /* create a mask of 0s */
         uint64_t mask = shift_right(~0ULL, (MAXBYTES - width));
         mask = ~shift_left(mask, lsb); /* shift mask by lsb and invert */
-        word = word & mask; /* take intersection of word and mask */
+        word = word & mask;            /* take intersection of word and mask */
         /* it empties a space to intersect the new value */
 
         uint64_t leading_one = ~0; /* initalize a 64-bit of 1s */
-        leading_one = shift_right(leading_one, (MAXBYTES - (width))); 
+        leading_one = shift_right(leading_one, (MAXBYTES - (width)));
         /* shift right until 1s only cover the word */
         /* all bits to the left of width are 0s */
 
         /* take intersection of word and mask */
-        value = value & leading_one; 
+        value = value & leading_one;
         value = shift_left(value, lsb); /* shift value to correct position */
 
         return (word | value); /* concatenate word with new value */
@@ -218,7 +224,7 @@ extern uint64_t Bitpack_news(uint64_t word, unsigned width, unsigned lsb,
 
 /********** shift_left ********
  *
- * Shift the binary representation of an unsigned int left by some offset; 
+ * Shift the binary representation of an unsigned int left by some offset;
  * if the offset is 64, we return 0;
  *
  * Parameters:
@@ -228,15 +234,16 @@ extern uint64_t Bitpack_news(uint64_t word, unsigned width, unsigned lsb,
  * Return: unsigned int with bits shifted left by offset
  *
  * Expects: The offset is be at most 64
- *      
+ *
  * Notes: none
- *      
+ *
  ************************/
 uint64_t shift_left(uint64_t n, unsigned offset)
 {
-        if (offset == MAXBYTES) {
+        if (offset == MAXBYTES)
+        {
                 return 0;
-        } 
+        }
         return (n << offset);
 }
 
@@ -252,14 +259,15 @@ uint64_t shift_left(uint64_t n, unsigned offset)
  * Return: unsigned int with bits shifted right by offset
  *
  * Expects: The offset is be at most 64
- *      
+ *
  * Notes: none
- *      
+ *
  ************************/
 uint64_t shift_right(uint64_t n, unsigned offset)
 {
-        if (offset == MAXBYTES) {
+        if (offset == MAXBYTES)
+        {
                 return 0;
-        } 
+        }
         return (n >> offset);
 }

@@ -6,17 +6,16 @@
  * CS 40 Homework 4 arith
  *
  * Implementation of compress40 and the compress and decompress functions.
- * The compress function reads an original image from an input file, 
- * performs various conversions on its color representations, 
- * packs the data into 32-bit codewords, and then writes the compressed 
- * image to standard output. The decompress40 function reads a 
- * compressed image from a specified file, unpacks 32-bit codewords, and 
- * undergoes reverse conversions to reconstruct the original image, which 
+ * The compress function reads an original image from an input file,
+ * performs various conversions on its color representations,
+ * packs the data into 32-bit codewords, and then writes the compressed
+ * image to standard output. The decompress40 function reads a
+ * compressed image from a specified file, unpacks 32-bit codewords, and
+ * undergoes reverse conversions to reconstruct the original image, which
  * is written to standard output
  *
  */
 
-#include "compress40.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -41,7 +40,7 @@
  *
  * Expects: input is a valid file pointer to an existing file containing
  *          a Pnm_ppm image in RGB format
- * 
+ *
  * Notes: Asserts that input is not NULL
  *        Reads the original image from the input file
  *        Converts RGB to component video space
@@ -53,11 +52,11 @@
 void compress40(FILE *input)
 {
         assert(input != NULL);
-        Pnm_ppm image = read_original(input); 
-        image = rgb_cv_convert(image, "rgb_to_cv"); 
-        image = luma_cos_convert(image, "luma_to_cos"); 
-        image = codewords(image, "pack"); 
-        write_compressed(image);    
+        Pnm_ppm image = read_original(input);
+        image = rgb_cv_convert(image, "rgb_to_cv");
+        image = luma_cos_convert(image, "luma_to_cos");
+        image = codewords(image, "pack");
+        write_compressed(image);
         Pnm_ppmfree(&image);
 }
 
@@ -73,7 +72,7 @@ void compress40(FILE *input)
  *
  * Expects: input is a valid file pointer to an existing file containing
  *          a compressed Pnm_ppm image
- * 
+ *
  * Notes: Asserts that input is not NULL
  *        Reads the compressed image from the input file
  *        Unpacks 32-bit codewords
@@ -85,10 +84,10 @@ void compress40(FILE *input)
 void decompress40(FILE *input)
 {
         assert(input != NULL);
-        Pnm_ppm image = read_compressed(input); 
-        image = codewords(image, "unpack"); 
+        Pnm_ppm image = read_compressed(input);
+        image = codewords(image, "unpack");
         image = luma_cos_convert(image, "cos_to_luma");
-        image = rgb_cv_convert(image, "cv_to_rgb"); 
-        write_original(image); 
-        Pnm_ppmfree(&image); 
+        image = rgb_cv_convert(image, "cv_to_rgb");
+        write_original(image);
+        Pnm_ppmfree(&image);
 }
