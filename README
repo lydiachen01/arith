@@ -1,0 +1,23 @@
+/****************************************************************************
+* arith_wa
+* README
+* Original Authors: Lydia Chen & Geneva Cheng
+* WA Extension: Lydia Chen
+*****************************************************************************/
+
+## Architecture
+
+### read_write
+Read and write compressed and decompressed images.
+
+### rgv_cv_converter
+Convert between RGB and CV representations. Contains helper functions to convert between integer and float representations of RGB values.
+
+### luma_cos_converter
+Convert between luma and cosine representations. Contains helper functions to convert between integer and float representations of cosine coefficients and average chroma values.
+
+### bitpack
+Test width, extract from, and update bit fields.
+
+### codewords
+Pack and unpack 32-bit codewords.
